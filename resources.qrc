@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/">
+        <file>public/img/settingsbar.png</file>
+        <file>public/img/reload.png</file>
+        <file>public/img/newtab.png</file>
+        <file>public/img/logo.png</file>
+        <file>public/img/logo.ico</file>
+        <file>public/img/forward.png</file>
+        <file>public/img/bookmark-solid.png</file>
+        <file>public/img/bookmark-regular.png</file>
+        <file>public/img/back.png</file>
+        <file>public/img/artado.png</file>
+        <file>public/img/bing.png</file>
+        <file>public/img/bravesearch.png</file>
+        <file>public/img/duckduckgo.png</file>
+        <file>public/img/google.png</file>
+        <file>public/img/startpage.png</file>
+    </qresource>
+</RCC>
