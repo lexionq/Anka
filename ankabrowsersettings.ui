@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>550</width>
-    <height>300</height>
+    <width>541</width>
+    <height>326</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,8 +20,8 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>260</y>
+     <x>170</x>
+     <y>280</y>
      <width>341</width>
      <height>32</height>
     </rect>
@@ -37,7 +37,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>0</y>
+     <y>20</y>
      <width>501</width>
      <height>261</height>
     </rect>
@@ -165,6 +165,13 @@
      <widget class="QPushButton" name="history_button">
       <property name="text">
        <string>Delete History</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="delete_bookmarks_but">
+      <property name="text">
+       <string>Delete Bookmarks</string>
       </property>
      </widget>
     </item>

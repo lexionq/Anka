@@ -32,6 +32,8 @@ public:
     void showHistory();
     void openFile();
     void handleDownloadRequest(QWebEngineDownloadRequest *download);
+    void addBookmark();
+    void loadBookmarks();
 private:
     Ui::AnkaBrowser *ui;
     AnkaBrowserSettings *ankabrowsersettings;

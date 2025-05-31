@@ -9,7 +9,6 @@
 #include <QFile>
 #include <QTextStream>
 
-
 AnkaBrowserSettings::AnkaBrowserSettings(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::AnkaBrowserSettings)
@@ -20,6 +19,7 @@ AnkaBrowserSettings::AnkaBrowserSettings(QWidget *parent)
     QString configFile = homeDir + "/.config/Anka/config.conf";
     QSettings settings(configFile, QSettings::IniFormat);
     QString searchEngine = settings.value("Settings/search_engine").toString();
+
 
     if (searchEngine == "https://google.com"){
         ui->search_engine_combobox->setCurrentIndex(0);
@@ -41,6 +41,7 @@ AnkaBrowserSettings::AnkaBrowserSettings(QWidget *parent)
     }
     connect(ui->select_tab_color, &QPushButton::clicked, this, &AnkaBrowserSettings::openColorDialog);
     connect(ui->history_button, &QPushButton::clicked, this, &AnkaBrowserSettings::deleteHistory);
+    connect(ui->delete_bookmarks_but, &QPushButton::clicked, this, &AnkaBrowserSettings::deleteBookmarks);
     connect(ui->buttonBox, &QDialogButtonBox::clicked, this, &AnkaBrowserSettings::onButtonClicked);
 
 }
@@ -68,6 +69,18 @@ void AnkaBrowserSettings::deleteHistory()
     QString historyFile = homeDir + "/.config/Anka/history.txt";
 
     QFile file(historyFile);
+
+    if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        file.close();
+    }
+}
+
+void AnkaBrowserSettings::deleteBookmarks()
+{
+    QString homeDir = QDir::homePath();
+    QString bookmarksFile = homeDir + "/.config/Anka/bookmarks.txt";
+
+    QFile file(bookmarksFile);
 
     if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         file.close();
@@ -104,6 +117,8 @@ void AnkaBrowserSettings::onButtonClicked(QAbstractButton *button)
             break;
         default:
             break;
+
+
 
         }
         accept();

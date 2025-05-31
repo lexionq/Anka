@@ -18,6 +18,7 @@ public:
     void openColorDialog();
     void onButtonClicked(QAbstractButton *button);
     void deleteHistory();
+    void deleteBookmarks();
 
 private:
     Ui::AnkaBrowserSettings *ui;

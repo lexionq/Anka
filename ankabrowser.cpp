@@ -12,6 +12,7 @@
 
 
 
+
 AnkaBrowser::AnkaBrowser(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::AnkaBrowser)
@@ -19,6 +20,7 @@ AnkaBrowser::AnkaBrowser(QWidget *parent)
 {
     ui->setupUi(this);
 
+    setCentralWidget(ui->centralwidget);
 
     QString homeDir = QDir::homePath();
     QString configPath = homeDir + "/.config/Anka";
@@ -26,6 +28,7 @@ AnkaBrowser::AnkaBrowser(QWidget *parent)
     QString bookmarks = configPath + "/bookmarks.txt";
     QString downloads = configPath + "/downloads.txt";
     QString history = configPath + "/history.txt";
+
 
     QSettings settings(configFile, QSettings::IniFormat);
 
@@ -72,7 +75,7 @@ AnkaBrowser::AnkaBrowser(QWidget *parent)
     std::string tab_name = "New Tab | Anka Browser";
 
     addNewTab(search_engine, QString::fromStdString(tab_name));
-
+    loadBookmarks();
 
 
 }
@@ -85,6 +88,7 @@ AnkaBrowser::~AnkaBrowser()
 void AnkaBrowser::addNewTab(const QString& url, const QString& label)
 {
     QWebEngineView* newBrowser = new QWebEngineView();
+    newBrowser->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     QString homeDir = QDir::homePath();
     QString configPath = homeDir + "/.config/Anka/";
     QString configFile = configPath + "config.conf";
@@ -114,7 +118,9 @@ void AnkaBrowser::addNewTab(const QString& url, const QString& label)
     connect(ui->back_button, &QPushButton::clicked, this, &AnkaBrowser::browserBack);
     connect(ui->forward_button, &QPushButton::clicked, this, &AnkaBrowser::browserForward);
     connect(ui->reload_button, &QPushButton::clicked, this, &AnkaBrowser::browserReload);
+    connect(ui->bookmark_button, &QPushButton::clicked, this, &AnkaBrowser::addBookmark);
     connect(ui->settings_button, &QPushButton::clicked, this, &AnkaBrowser::showSettingsMenu);
+
 
     connect(ui->tabs, &QTabWidget::tabCloseRequested, this, [this, index](int tabIndex) {
         if (tabIndex == index) {
@@ -311,4 +317,63 @@ void AnkaBrowser::openSettings()
 {
     ankabrowsersettings->exec();
 }
+void AnkaBrowser::addBookmark()
+{
+    QWebEngineView* current_browser = qobject_cast<QWebEngineView*>(ui->tabs->currentWidget());
+    if (!current_browser) return;
+
+    QString url = current_browser->url().toString();
+    QString title = current_browser->title();
+
+    QString homeDir = QDir::homePath();
+    QString bookmarksFile = homeDir + "/.config/Anka/bookmarks.txt";
+
+    QFile file(bookmarksFile);
+    if (file.open(QIODevice::Append | QIODevice::Text)) {
+        QTextStream out(&file);
+        out << title << " - " << url << "\n";
+        file.close();
+    }
+}
+void AnkaBrowser::loadBookmarks()
+{
+    QString homeDir = QDir::homePath();
+    QString bookmarksFile = homeDir + "/.config/Anka/bookmarks.txt";
+
+    QFile file(bookmarksFile);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        return;
+    }
+
+    QTextStream in(&file);
+
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        QStringList parts = line.split(" - ");
+        QString url = parts[1].trimmed();
+        QString title = parts[0].trimmed();
+        if (url.isEmpty()) continue;
+
+        ui->bookmarksLayout->setAlignment(Qt::AlignLeft);
+
+
+        QPushButton* bookmarkButton = new QPushButton(title, ui->bookmarksWidget);
+        bookmarkButton->setStyleSheet("text-align: left; font-size: 11px; margin-left: 3px; margin-right: 3px; padding: 6px;");
+        bookmarkButton->setFixedHeight(27);
+        bookmarkButton->setFixedWidth(120);
+        bookmarkButton->setCursor(Qt::PointingHandCursor);
+        bookmarkButton->setFont(QFont("Lexend", 11));
+
+
+        connect(bookmarkButton, &QPushButton::clicked, this, [this, url]() {
+            addNewTab(url, url);
+        });
+
+        ui->bookmarksLayout->addWidget(bookmarkButton);
+    }
+
+    file.close();
+}
+
+
 
