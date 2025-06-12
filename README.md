@@ -1,4 +1,5 @@
 # Anka 
+# **THIS PROJECT HAS BEEN PAUSED FOR A LONG TIME! IT WILL NOT RECEIVE UPDATES FOR A LONG TIME!**
 Anka is a browser with developed C++ and Qt. It use QWebEngine technology, so it use Chromium. Made in Türkiye! 🇹🇷🇹🇷
 
 ![Anka](.github/docs/img/ankasocialpreview.png)
